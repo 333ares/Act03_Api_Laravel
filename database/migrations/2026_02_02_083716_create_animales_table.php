@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 25);
             $table->string('tipo', 40);
-            $table->decimal('peso', 3, 2)->nullable();
+            $table->decimal('peso', 5, 2)->nullable();
             $table->string('enfermedad', 100)->nullable();
-            $table->string('comentarios', 255)->nullable();
             $table->longText('comentarios')->nullable();
-            $table->foreignId('dueño')->constrained('dueño', 'id')->onDelete('cascade'); // Si se elimina un dueño, se borran sus animales
-            $table->timestamps();
+            //$table->foreignId('dueno_id')->constrained('dueno')->onDelete('cascade'); // Si se elimina un dueño, se borran sus animales
+            $table->timestamps()->nullable();
         });
     }
 
