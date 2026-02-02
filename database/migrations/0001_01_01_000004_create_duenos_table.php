@@ -15,13 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 25);
             $table->string('apellido', 35);
-            $table->unsignedBigInteger('id_animal'); // Primero creo la columna
-            // Después la FK
-            $table->foreign('id_animal')
-                ->references('id')
-                ->on('animales')
-                ->onDelete('cascade');
             $table->timestamps();
+            $table->foreignId('id_animal')->constrained('animales')->onDelete('cascade');
         });
     }
     /**
