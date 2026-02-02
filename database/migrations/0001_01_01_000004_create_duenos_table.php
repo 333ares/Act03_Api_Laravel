@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 25);
             $table->string('apellido', 35);
-            $table->timestamps();
+            // Si se borra un animal, se borra su dueño
             $table->foreignId('id_animal')->constrained('animales')->onDelete('cascade');
+            $table->timestamps();
         });
     }
     /**

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('animales', function (Blueprint $table) {
             $table->id();
+            // Nombre y tipo no pueden estar vacíos
             $table->string('nombre', 25);
             $table->string('tipo', 40);
             $table->decimal('peso', 5, 2)->nullable();
