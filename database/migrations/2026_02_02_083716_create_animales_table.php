@@ -18,7 +18,8 @@ return new class extends Migration
             $table->decimal('peso', 3, 2)->nullable();
             $table->string('enfermedad', 100)->nullable();
             $table->string('comentarios', 255)->nullable();
-            $table->string('comentarios', 255)->nullable();
+            $table->longText('comentarios')->nullable();
+            $table->foreignId('dueño')->constrained('dueño', 'id')->onDelete('cascade'); // Si se elimina un dueño, se borran sus animales
             $table->timestamps();
         });
     }
