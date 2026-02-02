@@ -18,12 +18,6 @@ return new class extends Migration
             $table->decimal('peso', 5, 2)->nullable();
             $table->string('enfermedad', 100)->nullable();
             $table->longText('comentarios')->nullable();
-            $table->unsignedBigInteger('id_dueno'); // Primero creo la columna
-            // Después la FK
-            $table->foreign('id_dueno')
-                ->references('id')
-                ->on('duenos')
-                ->onDelete('cascade'); // Si se elimina un dueño, se borran sus animales
             $table->timestamps();
         });
     }
