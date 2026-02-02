@@ -15,10 +15,23 @@ class AnimalController extends Controller
         // Recuperar todos los animales
         $animales = Animales::all();
 
-        return response()->json([
-            'status' => true,
-            'animales' => $animales
-        ]);
+        if ($animales) {
+            // Si hay animales en la BD
+            return response()->json(
+                [
+                    'message' => 'success',
+                    'animales' => $animales
+                ]
+            );
+        } else {
+            // si la Bd esta vacía
+            return response()->json(
+                [
+                    'message' => 'error',
+                    'animales' => 'No hay animales registrados'
+                ]
+            );
+        }
     }
 
     function crearAnimal(Request $request)
