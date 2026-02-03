@@ -108,4 +108,50 @@ class AnimalController extends Controller
             );
         }
     }
+
+    function modificarAnimal(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required',
+            'tipo' => 'required|in:perro,gato,hamster,conejo'
+        ]);
+
+        if ($validator->fails()) {
+            return response(
+                [
+                    'message' => 'error',
+                    'animal' => 'El nombre y tipo del animal son datos obligatorios'
+                ],
+                400
+            );
+        } else {
+            $animal = Animales::find($request->id);
+            if ($animal) {
+                // Si el animal existe modificamos los datos
+                $animal->nombre = $request->nombre;
+                $animal->tipo = $request->tipo;
+                $animal->peso = $request->peso;
+                $animal->enfermedad = $request->enfermedad;
+                $animal->comentarios = $request->comentarios;
+                $animal->save();
+
+                return response(
+                    [
+                        'message' => 'success',
+                        'animal' => $animal
+                    ],
+                    200
+                );
+            } else {
+                // Si no existe mostramos error
+                return response(
+                    [
+                        'message' => 'error',
+                        'animal' => 'El animal no existe'
+                    ],
+                    400
+                );
+            }
+        }
+    }
 }
