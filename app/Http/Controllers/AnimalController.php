@@ -108,54 +108,48 @@ class AnimalController extends Controller
     /**
      * MODIFICAR ANIMAL
      */
-    function modificarAnimal(Request $request)
+    function modificarAnimal(Request $request, $id)
     {
-        // Comprobamos datos obligatorios
+        // Validación de datos
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
-            'tipo' => 'required|in:perro,gato,hamster,conejo'
+            'nombre' => 'required|string',
+            'tipo' => 'required|in:perro,gato,hamster,conejo',
+            'peso' => 'nullable|numeric',
+            'enfermedad' => 'nullable|string',
+            'comentarios' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
-            //Si la validación falla
-            return response(
-                [
-                    'message' => 'error',
-                    'animal' => 'El nombre y tipo del animal son datos obligatorios'
-                ],
-                400
-            );
-        } else {
-            // Si en la validación esta todo correcto
-            $animal = Animales::find($request->id); // Buscamos id de animal
-            if ($animal) {
-                // Si el animal existe modificamos los datos
-                $animal->nombre = $request->nombre;
-                $animal->tipo = $request->tipo;
-                $animal->peso = $request->peso;
-                $animal->enfermedad = $request->enfermedad;
-                $animal->comentarios = $request->comentarios;
-                $animal->save();
-
-                return response(
-                    [
-                        'message' => 'success',
-                        'animal' => $animal
-                    ],
-                    200
-                );
-            } else {
-                // Si no existe mostramos error
-                return response(
-                    [
-                        'message' => 'error',
-                        'animal' => 'No existe ningun animal con ese ID'
-                    ],
-                    400
-                );
-            }
+            return response([
+                'message' => 'error',
+                'errors' => $validator->errors()
+            ], 400);
         }
+
+        $animal = Animales::find($id);
+
+        if (!$animal) {
+            return response([
+                'message' => 'error',
+                'animal' => 'No existe ningún animal con ese ID'
+            ], 404);
+        }
+
+        // Actualizamos solo los campos necesarios
+        $animal->update($request->only([
+            'nombre',
+            'tipo',
+            'peso',
+            'enfermedad',
+            'comentarios'
+        ]));
+
+        return response([
+            'message' => 'success',
+            'animal' => $animal
+        ], 200);
     }
+
 
     /**
      * ELIMINAR ANIMAL
