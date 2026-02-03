@@ -40,31 +40,27 @@ class AnimalController extends Controller
     /**
      * VER INFORMACIÓN DE UN ANIMAL
      */
-    function verInfoAnimal(Request $request)
+    function verInfoAnimal($id)
     {
-        // Comprobamos que el id haya sido proporcionado
-        $validator = Validator::make($request->all(), ['id' => 'required']);
+        $animal = Animales::find($id);
 
-        if ($validator->fails()) {
-            // Si no se ha encontrado animal con ese ID
+        if (!$animal) {
             return response(
                 [
                     'message' => 'error',
-                    'animal' => 'El ID no existe o es incorrecto'
+                    'animal' => 'No existe un animal con ese ID'
                 ],
                 400
             );
-        } else {
-            // Si se ha encontrado lo mostramos
-            $animal = Animales::find($request->id);
-            return response(
-                [
-                    'message' => 'success',
-                    'animal' => $animal
-                ],
-                200
-            );
         }
+
+        return response(
+            [
+                'message' => 'success',
+                'animal' => $animal
+            ],
+            200
+        );
     }
 
     /**
@@ -159,5 +155,27 @@ class AnimalController extends Controller
                 );
             }
         }
+    }
+
+    /**
+     * ELIMINAR ANIMAL
+     */
+    function eliminarAnimal($id)
+    {
+        $animal = Animales::find($id);
+
+        if (!$animal) {
+            return response([
+                'message' => 'error',
+                'animal' => 'No existe un animal con ese ID'
+            ], 404);
+        }
+
+        $animal->delete();
+
+        return response([
+            'message' => 'success',
+            'animal' => 'El animal se ha borrado correctamente'
+        ], 200);
     }
 }
