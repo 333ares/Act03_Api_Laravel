@@ -121,8 +121,8 @@ class AnimalController extends Controller
     {
         // Validación de datos
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string',
-            'tipo' => 'required|in:perro,gato,hamster,conejo',
+            'nombre' => 'nullable|string',
+            'tipo' => 'nullable|in:perro,gato,hamster,conejo',
             'peso' => 'nullable|numeric',
             'enfermedad' => 'nullable|string',
             'comentarios' => 'nullable|string'
