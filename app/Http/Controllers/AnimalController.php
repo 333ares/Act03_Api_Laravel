@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Validator;
 class AnimalController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * LISTAR ANIMALES
      */
-    public function index()
+    public function listarAnimales()
     {
         // Recuperar todos los animales
         $animales = Animales::all();
@@ -37,6 +37,39 @@ class AnimalController extends Controller
         }
     }
 
+    /**
+     * VER INFORMACIÓN DE UN ANIMAL
+     */
+    function verInfoAnimal(Request $request)
+    {
+        // Comprobamos que el id haya sido proporcionado
+        $validator = Validator::make($request->all(), ['id' => 'required']);
+
+        if ($validator->fails()) {
+            // Si no se ha encontrado animal con ese ID
+            return response(
+                [
+                    'message' => 'error',
+                    'animal' => 'El ID no existe o es incorrecto'
+                ],
+                400
+            );
+        } else {
+            // Si se ha encontrado lo mostramos
+            $animal = Animales::find($request->id);
+            return response(
+                [
+                    'message' => 'success',
+                    'animal' => $animal
+                ],
+                200
+            );
+        }
+    }
+
+    /**
+     * CREAR UN ANIMAL
+     */
     function crearAnimal(Request $request)
     {
         // Comprobamos que los campos cumplen con las reglas
