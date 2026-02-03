@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Animales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AnimalController extends Controller
 {
@@ -16,7 +17,7 @@ class AnimalController extends Controller
         $animales = Animales::all();
 
         if (count($animales) >= 1) {
-            // Si hay animales en la BD
+            // Si hay animales en la bd
             return response()->json(
                 [
                     'message' => 'success',
@@ -25,7 +26,7 @@ class AnimalController extends Controller
                 200
             );
         } else {
-            // si la Bd esta vacía
+            // si la bd esta vacía
             return response()->json(
                 [
                     'message' => 'error',
@@ -38,41 +39,39 @@ class AnimalController extends Controller
 
     function crearAnimal(Request $request)
     {
-        // Comprobamos que los campos obligatorios estan completos
-        $request->validate([
+        // Comprobamos que los campos cumplen con las reglas
+        $validator = Validator::make($request->all(), [
             'nombre' => 'required',
-            'tipo' => 'required'
+            'tipo' => 'required|in:perro,gato,hamster,conejo' // Solo permitimos esos animales
         ]);
 
-        // Creamos el animal
-        $animal = Animales::create([
-            'nombre' => $request->nombre,
-            'tipo' => $request->tipo,
-            'peso' => $request->peso,
-            'enfermedad' => $request->enfermedad,
-            'comentarios' => $request->comentarios,
-        ]);
+        if ($validator->fails()) {
+            // Si las validaciones fallan mostramos error
+            return response(
+                [
+                    'message' => 'error',
+                    'animal' => 'El nombre y tipo del animal son datos obligatorios'
+                ],
+                400
+            );
+        } else {
+            // Si las validaciones son correctas creamos el animal en la bd
+            $animal = Animales::create([
+                'nombre' => $request->nombre,
+                'tipo' => $request->tipo,
+                'peso' => $request->peso,
+                'enfermedad' => $request->enfermedad,
+                'comentarios' => $request->comentarios,
+            ]);
 
-        // Comprobamso que se haya insertado bien, buscandolo por el id
-        $animal = Animales::find($animal->id);
-
-        if ($animal) {
-            // Si se ha insertado bien
+            // Mostramos el animal creado
+            $animal = Animales::find($animal->id);
             return response(
                 [
                     'message' => 'success',
                     'animal' => $animal
                 ],
                 200
-            );
-        } else {
-            // Si ha habido un error
-            return response(
-                [
-                    'message' => 'error',
-                    'animal' => 'El animal no existe'
-                ],
-                400
             );
         }
     }
