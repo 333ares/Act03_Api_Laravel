@@ -15,13 +15,14 @@ class AnimalController extends Controller
         // Recuperar todos los animales
         $animales = Animales::all();
 
-        if ($animales) {
+        if (count($animales) >= 1) {
             // Si hay animales en la BD
             return response()->json(
                 [
                     'message' => 'success',
                     'animales' => $animales
-                ]
+                ],
+                200
             );
         } else {
             // si la Bd esta vacía
@@ -29,7 +30,8 @@ class AnimalController extends Controller
                 [
                     'message' => 'error',
                     'animales' => 'No hay animales registrados'
-                ]
+                ],
+                400
             );
         }
     }
