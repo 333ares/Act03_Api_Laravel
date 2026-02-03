@@ -130,9 +130,9 @@ class DuenoController extends Controller
     {
         // Validación de datos
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string',
-            'apellido' => 'required|string',
-            'id_animal' => 'required|numeric',
+            'nombre' => 'nullable|string',
+            'apellido' => 'nullable|string',
+            'id_animal' => 'nullable|numeric',
         ]);
 
         // Si algun dato introducido es incorrecto
