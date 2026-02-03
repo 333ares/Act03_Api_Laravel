@@ -74,38 +74,53 @@ class DuenoController extends Controller
         Cogemos los datos que nos ha pasado el usuario
         y realizamos una serie de validaciones
         */
-        $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string',
-            'apellido' => 'required|string',
-            'id_animal' => 'required|numeric',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'nombre' => 'required|string',
+                'apellido' => 'required|string',
+                'id_animal' => 'required|numeric',
+            ]);
 
-        // Si el validadador falla mostramos error
-        if ($validator->fails()) {
+            // Si el validadador falla mostramos error
+            if ($validator->fails()) {
+                return response(
+                    [
+                        'message' => 'error',
+                        'errors' => $validator->errors()
+                    ],
+                    400
+                );
+            }
+
+            // Creamos un dueno solo con los datos que nos haya dado el usuario
+            $dueno = Duenos::create($request->only([
+                'nombre',
+                'apellido',
+                'id_animal',
+            ]));
+
+            // Cuando se haya creado, lo mostramos
             return response(
                 [
-                    'message' => 'error',
-                    'errors' => $validator->errors()
+                    'message' => 'success',
+                    'dueno' => $dueno
                 ],
-                400
+                201
             );
+        } catch (\Illuminate\Database\QueryException $e) {
+            $errorCode = $e->errorInfo[1]; // Cogo al info del error
+
+            if ($errorCode == 1452) { // Error de FK
+                // Muestro el mensaje de error
+                return response(
+                    [
+                        'message' => 'error',
+                        'dueno' => 'El ID de referencia no existe en la tabla principal',
+                    ],
+                    409
+                );
+            }
         }
-
-        // Creamos un dueno solo con los datos que nos haya dado el usuario
-        $dueno = Duenos::create($request->only([
-            'nombre',
-            'apellido',
-            'id_animal',
-        ]));
-
-        // Cuando se haya creado, lo mostramos
-        return response(
-            [
-                'message' => 'success',
-                'dueno' => $dueno
-            ],
-            201
-        );
     }
 
     /**
