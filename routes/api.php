@@ -9,5 +9,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/animales', [AnimalController::class, 'listarAnimales']);
 Route::get('/animal/{id}', [AnimalController::class, 'verInfoAnimal']);
 Route::post('/animal', [AnimalController::class, 'crearAnimal']);
-Route::put('/animal', [AnimalController::class, 'modificarAnimal']);
+Route::put('/animal/{id}', [AnimalController::class, 'modificarAnimal']);
 Route::delete('/animal/{id}', [AnimalController::class, 'eliminarAnimal']);
