@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Duenos extends Model
 {
-    protected $fillable = ['nombre', 'apellido'];
+    protected $fillable = ['nombre', 'apellido', 'id_animal'];
 }

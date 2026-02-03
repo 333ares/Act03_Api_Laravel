@@ -165,7 +165,7 @@ class DuenoController extends Controller
     /**
      * ELIMINAR DUEÑO
      */
-    function eliminarDueño($id)
+    function eliminarDueno($id)
     {
         // Buscamos al dueño con ese id
         $dueno = Duenos::find($id);
