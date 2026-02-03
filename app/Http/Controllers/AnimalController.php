@@ -120,19 +120,25 @@ class AnimalController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response([
-                'message' => 'error',
-                'errors' => $validator->errors()
-            ], 400);
+            return response(
+                [
+                    'message' => 'error',
+                    'errors' => $validator->errors()
+                ],
+                400
+            );
         }
 
         $animal = Animales::find($id);
 
         if (!$animal) {
-            return response([
-                'message' => 'error',
-                'animal' => 'No existe ningún animal con ese ID'
-            ], 404);
+            return response(
+                [
+                    'message' => 'error',
+                    'animal' => 'No existe ningún animal con ese ID'
+                ],
+                404
+            );
         }
 
         // Actualizamos solo los campos necesarios
@@ -144,10 +150,13 @@ class AnimalController extends Controller
             'comentarios'
         ]));
 
-        return response([
-            'message' => 'success',
-            'animal' => $animal
-        ], 200);
+        return response(
+            [
+                'message' => 'success',
+                'animal' => $animal
+            ],
+            200
+        );
     }
 
 
@@ -159,17 +168,23 @@ class AnimalController extends Controller
         $animal = Animales::find($id);
 
         if (!$animal) {
-            return response([
-                'message' => 'error',
-                'animal' => 'No existe un animal con ese ID'
-            ], 404);
+            return response(
+                [
+                    'message' => 'error',
+                    'animal' => 'No existe un animal con ese ID'
+                ],
+                404
+            );
         }
 
         $animal->delete();
 
-        return response([
-            'message' => 'success',
-            'animal' => 'El animal se ha borrado correctamente'
-        ], 200);
+        return response(
+            [
+                'message' => 'success',
+                'animal' => 'El animal se ha borrado correctamente'
+            ],
+            200
+        );
     }
 }
