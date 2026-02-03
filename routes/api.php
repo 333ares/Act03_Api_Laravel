@@ -19,5 +19,5 @@ Route::delete('/animal/{id}', [AnimalController::class, 'eliminarAnimal']);
 Route::get('/duenos', [DuenoController::class, 'listarDuenos']);
 Route::get('/dueno/{id}', [DuenoController::class, 'verInfoDueno']);
 Route::post('/dueno', [DuenoController::class, 'crearDueno']);
-Route::put('/dueno/{id}', [DuenoController::class, 'modificaDueno']);
+Route::put('/dueno/{id}', [DuenoController::class, 'modificarDueno']);
 Route::delete('/dueno/{id}', [DuenoController::class, 'eliminarDueno']);
