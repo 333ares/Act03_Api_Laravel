@@ -11,7 +11,7 @@ class AnimalController extends Controller
     /**
      * LISTAR ANIMALES
      */
-    public function listarAnimales()
+    function listarAnimales()
     {
         // Recuperar todos los animales
         $animales = Animales::all();
