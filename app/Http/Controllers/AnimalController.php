@@ -53,7 +53,7 @@ class AnimalController extends Controller
             'comentarios' => $request->comentarios,
         ]);
 
-        // Comprobamso que se haya insertado bien
+        // Comprobamso que se haya insertado bien, buscandolo por el id
         $animal = Animales::find($animal->id);
 
         if ($animal) {
@@ -61,18 +61,18 @@ class AnimalController extends Controller
             return response(
                 [
                     'message' => 'success',
-                    'animal' => $animal,
-                    'status' => 200
-                ]
+                    'animal' => $animal
+                ],
+                200
             );
         } else {
             // Si ha habido un error
             return response(
                 [
                     'message' => 'error',
-                    'animal' => 'El animal no existe',
-                    'status' => 404
-                ]
+                    'animal' => 'El animal no existe'
+                ],
+                400
             );
         }
     }
