@@ -109,14 +109,19 @@ class AnimalController extends Controller
         }
     }
 
+    /**
+     * MODIFICAR ANIMAL
+     */
     function modificarAnimal(Request $request)
     {
+        // Comprobamos datos obligatorios
         $validator = Validator::make($request->all(), [
             'nombre' => 'required',
             'tipo' => 'required|in:perro,gato,hamster,conejo'
         ]);
 
         if ($validator->fails()) {
+            //Si la validación falla
             return response(
                 [
                     'message' => 'error',
@@ -125,7 +130,8 @@ class AnimalController extends Controller
                 400
             );
         } else {
-            $animal = Animales::find($request->id);
+            // Si en la validación esta todo correcto
+            $animal = Animales::find($request->id); // Buscamos id de animal
             if ($animal) {
                 // Si el animal existe modificamos los datos
                 $animal->nombre = $request->nombre;
@@ -147,7 +153,7 @@ class AnimalController extends Controller
                 return response(
                     [
                         'message' => 'error',
-                        'animal' => 'El animal no existe'
+                        'animal' => 'No existe ningun animal con ese ID'
                     ],
                     400
                 );
