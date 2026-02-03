@@ -68,42 +68,41 @@ class AnimalController extends Controller
      */
     function crearAnimal(Request $request)
     {
-        // Comprobamos que los campos cumplen con las reglas
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
-            'tipo' => 'required|in:perro,gato,hamster,conejo' // Solo permitimos esos animales
+            'nombre' => 'required|string',
+            'tipo' => 'required|in:perro,gato,hamster,conejo',
+            'peso' => 'nullable|numeric',
+            'enfermedad' => 'nullable|string',
+            'comentarios' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
-            // Si las validaciones fallan mostramos error
             return response(
                 [
                     'message' => 'error',
-                    'animal' => 'El nombre y tipo del animal son datos obligatorios'
+                    'errors' => $validator->errors()
                 ],
                 400
             );
-        } else {
-            // Si las validaciones son correctas creamos el animal en la bd
-            $animal = Animales::create([
-                'nombre' => $request->nombre,
-                'tipo' => $request->tipo,
-                'peso' => $request->peso,
-                'enfermedad' => $request->enfermedad,
-                'comentarios' => $request->comentarios,
-            ]);
-
-            // Mostramos el animal creado
-            $animal = Animales::find($animal->id);
-            return response(
-                [
-                    'message' => 'success',
-                    'animal' => $animal
-                ],
-                200
-            );
         }
+
+        $animal = Animales::create($request->only([
+            'nombre',
+            'tipo',
+            'peso',
+            'enfermedad',
+            'comentarios'
+        ]));
+
+        return response(
+            [
+                'message' => 'success',
+                'animal' => $animal
+            ],
+            201
+        );
     }
+
 
     /**
      * MODIFICAR ANIMAL
