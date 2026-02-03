@@ -42,8 +42,10 @@ class AnimalController extends Controller
      */
     function verInfoAnimal($id)
     {
+        // Buscamos id del animal
         $animal = Animales::find($id);
 
+        // Si no se encuentra mostramos error
         if (!$animal) {
             return response(
                 [
@@ -54,6 +56,7 @@ class AnimalController extends Controller
             );
         }
 
+        // Si se encuentra mostramos la info del animal
         return response(
             [
                 'message' => 'success',
@@ -68,6 +71,10 @@ class AnimalController extends Controller
      */
     function crearAnimal(Request $request)
     {
+        /* 
+        Cogemos los datos que nos ha pasado el usuario
+        y realizamos una serie de validaciones
+        */
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string',
             'tipo' => 'required|in:perro,gato,hamster,conejo',
@@ -76,6 +83,7 @@ class AnimalController extends Controller
             'comentarios' => 'nullable|string',
         ]);
 
+        // Si el validadador falla mostramos error
         if ($validator->fails()) {
             return response(
                 [
@@ -86,6 +94,7 @@ class AnimalController extends Controller
             );
         }
 
+        // Creamos un animal solo con los datos que nos haya dado el usuario
         $animal = Animales::create($request->only([
             'nombre',
             'tipo',
@@ -94,6 +103,7 @@ class AnimalController extends Controller
             'comentarios'
         ]));
 
+        // Cuando se haya creado, lo mostramos
         return response(
             [
                 'message' => 'success',
@@ -118,6 +128,7 @@ class AnimalController extends Controller
             'comentarios' => 'nullable|string'
         ]);
 
+        // Si algun dato introducido es incorrecto
         if ($validator->fails()) {
             return response(
                 [
@@ -128,8 +139,10 @@ class AnimalController extends Controller
             );
         }
 
+        // Buscamos al animal con el id que nos ha pasado el usuario
         $animal = Animales::find($id);
 
+        // Si no se ha encontrado ningun animal con ese id
         if (!$animal) {
             return response(
                 [
@@ -149,6 +162,7 @@ class AnimalController extends Controller
             'comentarios'
         ]));
 
+        // Mostramos animal modificado
         return response(
             [
                 'message' => 'success',
@@ -164,8 +178,10 @@ class AnimalController extends Controller
      */
     function eliminarAnimal($id)
     {
+        // Buscamos al animal con ese id
         $animal = Animales::find($id);
 
+        // Si no existe, error
         if (!$animal) {
             return response(
                 [
@@ -176,8 +192,10 @@ class AnimalController extends Controller
             );
         }
 
+        // Si existe lo borramos
         $animal->delete();
 
+        // Mostramos mensaje de éxito
         return response(
             [
                 'message' => 'success',
